@@ -24,7 +24,7 @@ P22: P22.c
 P23: P23.c
 	$(CC) $(CFLAGS) -c P23.c -o bin/P23.o
 
-git: makefile *.c *.h *.txt *.md
+git: clean makefile *.c *.h *.txt *.md
 	git add makefile
 	git add README.md
 	git add bin
