@@ -66,6 +66,8 @@ void p22() {
         printf("\tPoint %03d: (%8.1lf, %8.1lf)\n", i+1, hull_set[i].x, hull_set[i].y);
     }
     printf("Recursive Divide-and-Conquer Quickhull Algorithm Execution Time = %d milliseconds\n", t_elapsed);*/
+
+    printf("\tI am p22\n");
 }
 
 // ======================================================================

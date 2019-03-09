@@ -56,6 +56,8 @@ void p21() {
         printf("\tPoint %03d: (%8.1lf, %8.1lf)\n", i+1, hull_set[i].x, hull_set[i].y);
     }
     printf("Brute Force Convex Hull Solution Execution Time = %d milliseconds\n", t_elapsed);*/
+
+    printf("\tI am p21\n");
 }
 
 // ======================================================================

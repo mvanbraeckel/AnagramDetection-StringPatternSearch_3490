@@ -32,6 +32,8 @@ void p12() {
     // calc execution time, then display results
     int t_elapsed = (int)( 1000.0*(t_end.time - t_start.time) + (t_end.millitm - t_start.millitm) );
     printf("\nInversion Count = %d | Recursive Divide-and-Conquer Time = %d milliseconds\n", count, t_elapsed);*/
+
+    printf("\tI am p12\n");
 }
 
 // ======================================================================
