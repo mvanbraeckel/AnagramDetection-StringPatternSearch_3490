@@ -10,7 +10,7 @@
 
 /**
  * Transform-and-conquer algorithm that counts number of anagrams in up to 30000 strings read from data_4.txt using a presort technique
- * --> prompts user for string, finds all anagrams (excluding given string), displays anagrams, report total #of anagrams found, run time (sort time separate from search time)
+ * --> then: prompts user for string, finds all anagrams (excluding given string), displays anagrams, report total #of anagrams found, run time (sort time separate from search time)
  */
 void p12() {
     // declare variables

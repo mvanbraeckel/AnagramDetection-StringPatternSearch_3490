@@ -17,6 +17,7 @@
 #include <float.h>
 #include <math.h>
 #include <stdbool.h>
+#include <ctype.h>
 
 // ============================== STRUCTS ===============================
 
@@ -29,7 +30,10 @@ void p23();
 
 // ======================================================================
 
-void flush_input(char *input);
+void flushInput(char *input);
+int isWhitespace(char *input);
+int containsWhitespace(char *input);
 
+void read_strings(char* filename, char* arr[30000], int *n);
 
 #endif

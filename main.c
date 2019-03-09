@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
                 "Enter a code (1 – 6) and hit Return\n" \
                 "algos/> ");
         fgets(menu_input, 3, stdin);    //only need the first character of input for menu option
-        flush_input(menu_input);
+        flushInput(menu_input);
 
         // checks user input
         if(strlen(menu_input) > 1) {
@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
  * Flushes all leftover data in the stream
  * @param char* input -the string that was just read from stdin
  */
-void flush_input(char* input) {
+void flushInput(char* input) {
     // if the '\n' is NOT found in the word itself, flush the stream (null-terminate the input regardless)
     if(strchr(input, '\n') == NULL) {
         while ((getchar()) != '\n');
@@ -73,4 +73,64 @@ void flush_input(char* input) {
     } else {
         input[strlen(input)-1] = '\0';
     }
+}
+
+/**
+ * Checks if the string is pure whitespace
+ * @param char *input -the string to be checked
+ * @return 1 if the string only contains whitespace characters
+ */
+int isWhitespace(char *input) {
+    for(int i = 0; i < strlen(input); i++) {
+        if(!isspace(input[i])) {
+            return 0; //contained a non-whitespace character
+        }
+    }
+    return 1;
+}
+
+/**
+ * Checks if the string contains any whitespace
+ * @param char *input -the string to be checked
+ * @return 1 if the string contains at least one whitespace character
+ */
+int containsWhitespace(char *input) {
+    for(int i = 0; i < strlen(input); i++) {
+        if(isspace(input[i])) {
+            return 1; //contained a whitespace character
+        }
+    }
+    return 0;
+}
+
+
+/**
+ * Reads in up to 30000 strings from a file
+ * @param char* filename -the name of the text file being read
+ * @param char* arr[] -the string array of 30,000 to be loaded
+ * @param int* n -passed-by-reference to count the number of strings read
+ */
+void read_strings(char* filename, char* arr[30000], int *n) {
+    char buffer[51] = ""; //50 char max
+    *n = 0;
+
+    FILE *fp = fopen(filename, "r");
+    // checks if fopen messed up
+    if(fp == NULL) {
+        fprintf(stderr, "ERROR: File could not be opened\n");
+
+    } else {
+        // read one string at a time until the end of the file (or max reached)
+        int i = 0;
+        while(!feof(fp) && i < 30000) {
+            // read a word, allocate mem, copy over data, null terminate (just in case)
+            fscanf(fp, " %s ", buffer);
+            arr[i] = malloc((strlen(buffer)+1) * sizeof(char));
+            strcpy(arr[i], buffer);
+            arr[i][strlen(arr[i])] = '\0';
+            i++;
+        }
+        *n = i;
+    }
+    fclose(fp);
 }
