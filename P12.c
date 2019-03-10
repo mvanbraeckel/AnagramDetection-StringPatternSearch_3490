@@ -97,7 +97,7 @@ void p12() {
     printf("\n");
 
     // display results
-    printf("\nTotal Anagrams Found\t= %d\nSorting Time\t\t= %d milliseconds\nSearching Time\t\t= %d milliseconds\n", count, t_elapsedSort, t_elapsedSearch);
+    printf("\nTotal Anagrams Found\t= %d\nPre-Sorting Time\t\t= %d milliseconds\nSearching Time\t\t= %d milliseconds\n", count, t_elapsedSort, t_elapsedSearch);
 
     // free all created strings
     for(int i = 0; i < size; i++) {

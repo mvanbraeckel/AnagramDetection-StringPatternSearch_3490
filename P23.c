@@ -13,8 +13,9 @@
 /**
  * Boyer-Moore algorithm that searches for a substring pattern match in a document of up to 44049 lines of strings that are read from data_5.txt
  * --> prompt user for search pattern (substring), find all occurences of the pattern, report total #of occurences found, #of pattern shifts, and run time
+ * @param const char* doc -the preread data_5.txt file as one string (w/ \r and \n removed)
  */
-void p23() {
+void p23(const char* doc) {
     // declare variables
 
     printf("\tI am p23\n");

@@ -13,8 +13,9 @@
 /**
  * Horspool's algorithm that searches for a substring pattern match in a document of up to 44049 lines of strings that are read from data_5.txt
  * --> prompt user for search pattern (substring), find all occurences of the pattern, report total #of occurences found, #of pattern shifts, and run time
+ * @param const char* doc -the preread data_5.txt file as one string (w/ \r and \n removed)
  */
-void p22() {
+void p22(const char* doc) {
     // declare variables
     
     /*Point points[30000];

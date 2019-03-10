@@ -14,6 +14,16 @@ int main(int argc, char* argv[]) {
 
     // declare variables
     char menu_input[3];
+    const char* doc = NULL;
+    struct timeb t_start, t_end;
+    
+    // read in the data
+    printf("\n...loading data... (~20 seconds)\n");
+    ftime(&t_start);
+    doc = readDocument("data_5.txt");
+    ftime(&t_end);
+    int t_elapsed = (int)( 1000.0*(t_end.time - t_start.time) + (t_end.millitm - t_start.millitm) );
+    printf("\nReading Time = %d milliseconds\n", t_elapsed);
 
     // infinite menu loop, only ending program with '7' as input
     while(1) {
@@ -40,16 +50,19 @@ int main(int argc, char* argv[]) {
             p12();
 
         } else if(menu_input[0] == '3') {         // ================================= 3 =================================
-            p21();
+            p21(doc);
 
         } else if(menu_input[0] == '4') {         // ================================= 4 =================================
-            p22();
+            p22(doc);
 
         } else if(menu_input[0] == '5') {         // ================================= 5 =================================
-            p23();
+            p23(doc);
 
         } else if(menu_input[0] == '6') {         // ================================= 6 =================================
             printf("\nGood bye!\n");    // display closing msg
+
+            // free before leaving
+            free((char*)doc);
             return 0;
 
         } else {                                  // =============================== ELSE ================================
@@ -59,7 +72,7 @@ int main(int argc, char* argv[]) {
     } // end menu loop
 }
 
-// ======================================== HELPERS ========================================
+// ======================================= MY HELPERS =======================================
 
 /**
  * Flushes all leftover data in the stream
@@ -81,7 +94,8 @@ void flushInput(char* input) {
  * @return 1 if the string only contains whitespace characters
  */
 int isWhitespace(char *input) {
-    for(int i = 0; i < strlen(input); i++) {
+    int len = strlen(input);
+    for(int i = 0; i < len; i++) {
         if(!isspace(input[i])) {
             return 0; //contained a non-whitespace character
         }
@@ -95,7 +109,8 @@ int isWhitespace(char *input) {
  * @return 1 if the string contains at least one whitespace character
  */
 int containsWhitespace(char *input) {
-    for(int i = 0; i < strlen(input); i++) {
+    int len = strlen(input);
+    for(int i = 0; i < len; i++) {
         if(isspace(input[i])) {
             return 1; //contained a whitespace character
         }
@@ -103,6 +118,23 @@ int containsWhitespace(char *input) {
     return 0;
 }
 
+/**
+ * Checks if the string is alphabetical (lower and upper case characters only)
+ * @param char *input -the string to be checked
+ * @return 1 if the string only contains the basic 52 alphabetical characters
+ */
+int isAlphabetical(char *input) {
+    int len = strlen(input);
+    if(len == 0) return 0;
+    for(int i = 0; i < len; i++) {
+        if(!isalpha(input[i])) {
+            return 0; //contained a non-alphabetical character
+        }
+    }
+    return 1;
+}
+
+// ======================================== HELPERS ========================================
 
 /**
  * Reads in up to 30000 strings from a file
@@ -124,9 +156,9 @@ void readStrings(char* filename, char* arr[30000]) {
         while(!feof(fp) && i < 30000) {
             // read a word, allocate mem, copy over data, null terminate (just in case)
             fscanf(fp, " %s ", buffer);
-            arr[i] = malloc((strlen(buffer)+1) * sizeof(char));
+            int bLen = strlen(buffer);
+            arr[i] = malloc((bLen+1) * sizeof(char));
             strcpy(arr[i], buffer);
-            arr[i][strlen(arr[i])] = '\0';
             i++;
         }
     }
@@ -139,8 +171,8 @@ void readStrings(char* filename, char* arr[30000]) {
  * @return a string containing all words in the file separated by a space
  */
 const char* readDocument(char* filename) {
-    char buffer[51] = ""; //50 char max
     char* doc = NULL;
+    //char* temp = NULL;
     
     FILE *fp = fopen(filename, "r");
     // checks if fopen messed up
@@ -153,19 +185,42 @@ const char* readDocument(char* filename) {
         int len = ftell(fp);
         fseek(fp, 0, SEEK_SET);
         doc = calloc(len+1, sizeof(char)); //init the string array
+        //temp = calloc(len+1, sizeof(char));
 
         // read one string at a time until the end of the file (or max reached)
+        /*char buffer[102] = ""; //100 char max
         int i = 0;
         while(!feof(fp)) {
             // read a word, allocate mem, copy over data, null terminate (just in case)
             if(i++ != 0 ) {
                 strcat(doc, " ");
             }
-            fscanf(fp, " %s ", buffer);
+            fgets(buffer, 102, fp);
+            // replace CR and LF at the end if they exist
+            int bLen = strlen(buffer);
+            for(int j = bLen-1; j > bLen-3; j--) {
+                if(buffer[j] == '\n' || buffer[j] == '\r') {
+                    buffer[j] = '\0';
+                }
+            }
+            //printf("@i=%d --> buffer: '%s'\n",i,buffer);
             strcat(doc, buffer);
-            doc[strlen(doc)] = '\0';
+        }*/
+
+        fread(doc, sizeof(char), len, fp); // reads entire file into the array at once
+		doc[len] = '\0';
+
+        // remove CR and LF if they appear
+        /*for(int i = 0; i < len; i++) {
+            if(doc[i] == '\n' || doc[i] == '\r') {
+                strcpy(temp, doc+i+1);
+                strcpy(doc+i, temp);
+                len--;
+                i--;
+            }
         }
-    }
+        free(temp);*/
+	}
     fclose(fp);
     return (const char*)doc;
 }

@@ -24,15 +24,16 @@
 // ======================================================================
 void p11();
 void p12();
-void p21();
-void p22();
-void p23();
+void p21(const char* doc);
+void p22(const char* doc);
+void p23(const char* doc);
 
 // ======================================================================
 
 void flushInput(char *input);
 int isWhitespace(char *input);
 int containsWhitespace(char *input);
+int isAlphabetical(char *input);
 
 
 void readStrings(char* filename, char* arr[30000]);
@@ -45,5 +46,6 @@ void mergesort(char arr[], char temp[], int left, int right);
 void merge(char arr[], char temp[], int left, int mid, int right);
 
 const char* readDocument(char* filename);
+void findMatches(const char doc[], char pattern[], int *matches, int *shifts);
 
 #endif
