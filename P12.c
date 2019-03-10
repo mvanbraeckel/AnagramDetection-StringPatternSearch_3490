@@ -89,7 +89,7 @@ void p12() {
 
             // resume search time
             ftime(&t_startSearch);
-            if(strcmp(key, arr[i]) != 0 && strcmp(keySorted, copyStr) == 0) {
+            if(strcmp(keySorted, copyStr) == 0 && strcmp(key, arr[i]) != 0) {
                 // allocate mem, then store original in it
                 anagrams[count] = malloc((length+1) * sizeof(char));
                 strcpy(anagrams[count], arr[i]);
@@ -113,9 +113,7 @@ void p12() {
     }
     printf("\n");
 
-    // calc execution time, then display results
-    //int t_elapsedSort = (int)( 1000.0*(t_endSort.time - t_startSort.time) + (t_endSort.millitm - t_startSort.millitm) );
-    //int t_elapsedSearch = (int)( 1000.0*(t_endSearch.time - t_startSearch.time) + (t_endSearch.millitm - t_startSearch.millitm) );
+    // display results
     printf("\nTotal Anagrams Found\t= %d\nSorting Time\t\t= %d milliseconds\nSearching Time\t\t= %d milliseconds\n", count, t_elapsedSort, t_elapsedSearch);
 
     // free all created strings
