@@ -133,9 +133,14 @@ void readStrings(char* filename, char* arr[30000]) {
     fclose(fp);
 }
 
-/*char* readDocument(char* filename) {
+/**
+ * Reads into a single string one word at a time from a file
+ * @param char* filename -the name of the text file document being read
+ * @return a string containing all words in the file separated by a space
+ */
+const char* readDocument(char* filename) {
     char buffer[51] = ""; //50 char max
-    char* document = NULL;
+    char* doc = NULL;
     
     FILE *fp = fopen(filename, "r");
     // checks if fopen messed up
@@ -147,18 +152,20 @@ void readStrings(char* filename, char* arr[30000]) {
         fseek(fp, 0, SEEK_END);
         int len = ftell(fp);
         fseek(fp, 0, SEEK_SET);
-        document = calloc(len+1, sizeof(char)); //init the string array
+        doc = calloc(len+1, sizeof(char)); //init the string array
 
         // read one string at a time until the end of the file (or max reached)
         int i = 0;
         while(!feof(fp)) {
             // read a word, allocate mem, copy over data, null terminate (just in case)
+            if(i++ != 0 ) {
+                strcat(doc, " ");
+            }
             fscanf(fp, " %s ", buffer);
-            arr[i] = malloc((strlen(buffer)+1) * sizeof(char));
-            strcpy(arr[i], buffer);
-            arr[i][strlen(arr[i])] = '\0';
-            i++;
+            strcat(doc, buffer);
+            doc[strlen(doc)] = '\0';
         }
     }
     fclose(fp);
-}*/
+    return (const char*)doc;
+}

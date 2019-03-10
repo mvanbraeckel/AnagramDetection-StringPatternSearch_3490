@@ -16,8 +16,9 @@
  */
 void p21() {
     // declare variables
-    
-    
+    const char* doc = readDocument("data_5.txt");
+    printf("'^'%s'^'\n", doc);
+    free((char*)doc);
 
     printf("\tI am p21\n");
 }

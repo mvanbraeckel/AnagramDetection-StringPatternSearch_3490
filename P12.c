@@ -41,22 +41,7 @@ void p12() {
         }
     }
 
-    // pre-sort every string first (key, and all in the array): sort copies of the original
-    /*printf("\n...presorting the strings via qsort...\n");
-    ftime(&t_startSort);
-
-    char* arrSorted[size];
-    strcpy(keySorted, key);
-    qsort(keySorted, strlen(keySorted), sizeof(char), *charCompar);
-    // allocate mem, then store original in it, then sort it
-    for(int i = 0; i < size; i++) {
-        arrSorted[i] = malloc((strlen(arr[i])+1) * sizeof(char));
-        strcpy(arrSorted[i], arr[i]);
-        qsort(arrSorted[i], strlen(arrSorted[i]), sizeof(char), *charCompar);
-    }
-
-    ftime(&t_endSort);*/
-
+    // calculate execution time separately while sorting and searching
     int len = strlen(key);
     char copyStr[52], temp[52];
     int t_elapsedSort = 0;
@@ -69,10 +54,8 @@ void p12() {
     ftime(&t_endSort);
     t_elapsedSort += (int)( 1000.0*(t_endSort.time - t_startSort.time) + (t_endSort.millitm - t_startSort.millitm) );
     
-    // search for anagrams
+    // search for anagrams - since sorted, anagrams are equal strings (make sure it's not the same originally though)
     ftime(&t_startSearch);
-
-    // since sorted, anagrams are equal strings (make sure it's not the same originally though)
     for(int i = 0; i < size; i++) {
         int length = strlen(arr[i]);
         if(len == length) {

@@ -34,15 +34,16 @@ void flushInput(char *input);
 int isWhitespace(char *input);
 int containsWhitespace(char *input);
 
-void readStrings(char* filename, char* arr[30000]);
 
+void readStrings(char* filename, char* arr[30000]);
 int anagramSearch(const char* arr[], int size, char* anagrams[], char key[]);
 bool isAnagram(char keyCopy[], const char otherStr[]);
 
 int charCompar(const void *a, const void *b);
 int strCompar(const void *a, const void *b);
-
 void mergesort(char arr[], char temp[], int left, int right);
 void merge(char arr[], char temp[], int left, int mid, int right);
+
+const char* readDocument(char* filename);
 
 #endif
