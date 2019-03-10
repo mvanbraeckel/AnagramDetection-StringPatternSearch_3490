@@ -18,13 +18,13 @@ void p12() {
     char* arr[30000];
     char key[52];
     char keySorted[52];
-    int size = 0;
     int count = 0;
     bool validInput = false;
     struct timeb t_startSort, t_endSort, t_startSearch, t_endSearch;
     
     // read in the data
-    read_strings("data_4.txt", arr, &size);
+    readStrings("data_4.txt", arr);
+    int size = sizeof(arr) / sizeof(char*);
     char* anagrams[size];
 
     // prompt user for key string to search for anagrams, make sure they enter something valid
@@ -42,37 +42,63 @@ void p12() {
     }
 
     // pre-sort every string first (key, and all in the array): sort copies of the original
-    printf("\n...presorting the strings via qsort...\n");
+    /*printf("\n...presorting the strings via qsort...\n");
     ftime(&t_startSort);
 
     char* arrSorted[size];
     strcpy(keySorted, key);
-    qsort(keySorted, strlen(keySorted), sizeof(char), charCompar);
+    qsort(keySorted, strlen(keySorted), sizeof(char), *charCompar);
     // allocate mem, then store original in it, then sort it
     for(int i = 0; i < size; i++) {
         arrSorted[i] = malloc((strlen(arr[i])+1) * sizeof(char));
         strcpy(arrSorted[i], arr[i]);
-        qsort(arrSorted[i], strlen(arrSorted[i]), sizeof(char), charCompar);
+        qsort(arrSorted[i], strlen(arrSorted[i]), sizeof(char), *charCompar);
     }
 
-    ftime(&t_endSort);
-
-    // search for anagrams
-    printf("\n...searching for anagrams...\n");
-    ftime(&t_startSearch);
+    ftime(&t_endSort);*/
 
     int len = strlen(key);
+    char copyStr[52], temp[52];
+    int t_elapsedSort = 0;
+    int t_elapsedSearch = 0;
+    
+    // track time for sorting the key
+    strcpy(keySorted, key);
+    ftime(&t_startSort);
+    mergesort(keySorted, temp, 0, len-1);//qsort(keySorted, strlen(keySorted), sizeof(char), *charCompar);
+    ftime(&t_endSort);
+    t_elapsedSort += (int)( 1000.0*(t_endSort.time - t_startSort.time) + (t_endSort.millitm - t_startSort.millitm) );
+    
+    // search for anagrams
+    ftime(&t_startSearch);
+
     // since sorted, anagrams are equal strings (make sure it's not the same originally though)
     for(int i = 0; i < size; i++) {
-        if(len == strlen(arr[i]) && strcmp(key, arr[i]) != 0 && strcmp(keySorted, arrSorted[i]) == 0) {
-            // allocate mem, then store original in it
-            anagrams[count] = malloc((strlen(arr[i])+1) * sizeof(char));
-            strcpy(anagrams[count], arr[i]);
-            count++; //accumulate
+        int length = strlen(arr[i]);
+        if(len == length) {
+            // pause search time
+            ftime(&t_endSearch);
+            t_elapsedSearch += (int)( 1000.0*(t_endSearch.time - t_startSearch.time) + (t_endSearch.millitm - t_startSearch.millitm) );
+
+            // track time for sorting
+            strcpy(copyStr, arr[i]);
+            ftime(&t_startSort);
+            mergesort(copyStr, temp, 0, length-1);//qsort(copyStr, length, sizeof(char), *charCompar);
+            ftime(&t_endSort);
+            t_elapsedSort += (int)( 1000.0*(t_endSort.time - t_startSort.time) + (t_endSort.millitm - t_startSort.millitm) );
+
+            // resume search time
+            ftime(&t_startSearch);
+            if(strcmp(key, arr[i]) != 0 && strcmp(keySorted, copyStr) == 0) {
+                // allocate mem, then store original in it
+                anagrams[count] = malloc((length+1) * sizeof(char));
+                strcpy(anagrams[count], arr[i]);
+                count++; //accumulate
+            }
         }
     }
-
     ftime(&t_endSearch);
+    t_elapsedSearch += (int)( 1000.0*(t_endSearch.time - t_startSearch.time) + (t_endSearch.millitm - t_startSearch.millitm) );
 
     // display anagrams
     printf("\n\tDetected Anagrams:\n\t====================\n");
@@ -88,14 +114,14 @@ void p12() {
     printf("\n");
 
     // calc execution time, then display results
-    int t_elapsedSort = (int)( 1000.0*(t_endSort.time - t_startSort.time) + (t_endSort.millitm - t_startSort.millitm) );
-    int t_elapsedSearch = (int)( 1000.0*(t_endSearch.time - t_startSearch.time) + (t_endSearch.millitm - t_startSearch.millitm) );
+    //int t_elapsedSort = (int)( 1000.0*(t_endSort.time - t_startSort.time) + (t_endSort.millitm - t_startSort.millitm) );
+    //int t_elapsedSearch = (int)( 1000.0*(t_endSearch.time - t_startSearch.time) + (t_endSearch.millitm - t_startSearch.millitm) );
     printf("\nTotal Anagrams Found\t= %d\nSorting Time\t\t= %d milliseconds\nSearching Time\t\t= %d milliseconds\n", count, t_elapsedSort, t_elapsedSearch);
 
     // free all created strings
     for(int i = 0; i < size; i++) {
         free(arr[i]);
-        free(arrSorted[i]);
+        //free(arrSorted[i]);
     }
     for(int i = 0; i < count; i++) {
         free(anagrams[i]);
@@ -111,4 +137,61 @@ void p12() {
  */
 int charCompar(const void *a, const void *b) {
     return *(const char *)a - *(const char *)b;
+}
+/**
+ * Comparator function for QSORT - compares two strings (used for sorting array of strings ascending order)
+ * @param a -the first string
+ * @param b -the second string
+ */
+int strCompar(const void *a, const void *b) {
+    return strcmp(*(const char **)a, *(const char **)b);
+}
+// qsort({arr}, sizeof({arr}) / sizeof({arr datatype}), sizeof(char*), *strCompar);
+
+/**
+ * Mergesort a string (ascending order)
+ * @param char arr[] -the string to be sorted
+ * @param char temp[] -the temp copy of the string to hold things during merging
+ * @param int left -the left index (begin)
+ * @param int right -the right index (end)
+ */
+void mergesort(char arr[], char temp[], int left, int right) {
+    if(left < right) {
+        // divide array into halves, then mergesort each separately, then merge it back together
+        int mid = left + (right - left) / 2; // = (l+r)/2, avoids overflow for large numbers
+
+        // total #of inversions = left-part + right-part + merging-part
+        mergesort(arr, temp, left, mid);
+        mergesort(arr, temp, mid+1, right);
+        merge(arr, temp, left, mid+1, right);
+    }
+}
+
+/**
+ * Does the re-merging of two sorted strings for mergesort (ascending order)
+ * @param char arr[] -the string to be sorted
+ * @param int temp[] -the temp copy of the string to hold things during merging
+ * @param int left -the left index (begin)
+ * @param int mid -the middle index (half)
+ * @param int right -the right index (end)
+ */
+void merge(char arr[], char temp[], int left, int mid, int right) {
+    // Initial indices of left, right, and merged subarrays
+    int i = left;
+    int j = mid;
+    int k = left;
+
+    // create sorted array using both halves
+    while( i <= mid-1 && j <= right ) {
+        if(arr[i] <= arr[j]) {
+            temp[k++] = arr[i++];
+        } else {
+            temp[k++] = arr[j++];
+        }
+    }
+
+    // Copy any remaining elements of left and right arrays to temp, then overwrite original with merged
+    while(i <= mid-1) temp[k++] = arr[i++];
+    while(j <= right) temp[k++] = arr[j++];
+    for(i = left; i <= right; i++) arr[i] = temp[i];
 }

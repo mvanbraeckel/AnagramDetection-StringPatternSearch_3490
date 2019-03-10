@@ -16,12 +16,12 @@ void p11() {
     // declare variables
     char* arr[30000];
     char key[52];
-    int size = 0;
     bool validInput = false;
     struct timeb t_start, t_end;
     
     // read in the data
-    read_strings("data_4.txt", arr, &size);
+    readStrings("data_4.txt", arr);
+    int size = sizeof(arr) / sizeof(char*);
     char* anagrams[size];
     
     // prompt user for key string to search for anagrams, make sure they enter something valid
@@ -39,7 +39,6 @@ void p11() {
     }
 
     // search for anagrams
-    printf("\n...searching for anagrams...\n");
     ftime(&t_start);
     int count = anagramSearch((const char**)arr, size, anagrams, key);
     ftime(&t_end);

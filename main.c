@@ -110,9 +110,8 @@ int containsWhitespace(char *input) {
  * @param char* arr[] -the string array of 30,000 to be loaded
  * @param int* n -passed-by-reference to count the number of strings read
  */
-void read_strings(char* filename, char* arr[30000], int *n) {
+void readStrings(char* filename, char* arr[30000]) {
     char buffer[51] = ""; //50 char max
-    *n = 0;
 
     FILE *fp = fopen(filename, "r");
     // checks if fopen messed up
@@ -130,7 +129,36 @@ void read_strings(char* filename, char* arr[30000], int *n) {
             arr[i][strlen(arr[i])] = '\0';
             i++;
         }
-        *n = i;
     }
     fclose(fp);
 }
+
+/*char* readDocument(char* filename) {
+    char buffer[51] = ""; //50 char max
+    char* document = NULL;
+    
+    FILE *fp = fopen(filename, "r");
+    // checks if fopen messed up
+    if(fp == NULL) {
+        fprintf(stderr, "ERROR: File could not be opened\n");
+
+    } else {
+        // calculate number of chars (using total bytes), then allocate mem
+        fseek(fp, 0, SEEK_END);
+        int len = ftell(fp);
+        fseek(fp, 0, SEEK_SET);
+        document = calloc(len+1, sizeof(char)); //init the string array
+
+        // read one string at a time until the end of the file (or max reached)
+        int i = 0;
+        while(!feof(fp)) {
+            // read a word, allocate mem, copy over data, null terminate (just in case)
+            fscanf(fp, " %s ", buffer);
+            arr[i] = malloc((strlen(buffer)+1) * sizeof(char));
+            strcpy(arr[i], buffer);
+            arr[i][strlen(arr[i])] = '\0';
+            i++;
+        }
+    }
+    fclose(fp);
+}*/
