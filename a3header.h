@@ -36,4 +36,9 @@ int containsWhitespace(char *input);
 
 void read_strings(char* filename, char* arr[30000], int *n);
 
+int anagramSearch(const char* arr[], int size, char* anagrams[], char key[]);
+bool isAnagram(char keyCopy[], const char otherStr[]);
+
+int charCompar(const void *a, const void *b);
+
 #endif

@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
     // infinite menu loop, only ending program with '7' as input
     while(1) {
         printf("\n1. P11.c - Brute Force Anagram Detection\n" \
-                "2. P12.c - Anagram Detection based on Presorting Technique\n" \
+                "2. P12.c - Anagram Detection based on Presorting Technique (qsort)\n" \
                 "3. P21.c - Brute Force String Pattern Search\n" \
                 "4. P22.c - Horspool's Algorithm (String Pattern Search)\n" \
                 "5. P23.c - Boyer-Moore Algorithm (String Pattern Search)\n" \
