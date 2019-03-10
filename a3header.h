@@ -45,7 +45,9 @@ int strCompar(const void *a, const void *b);
 void mergesort(char arr[], char temp[], int left, int right);
 void merge(char arr[], char temp[], int left, int mid, int right);
 
+
 const char* readDocument(char* filename);
 void findMatches(const char doc[], char pattern[], int *matches, int *shifts);
+void horspool(const char doc[], char pattern[], int *matches, int *shifts);
 
 #endif

@@ -1,7 +1,7 @@
 /**
  * @author Mitchell Van Braeckel (mvanbrae@uoguelph.ca) 1002297
  * @course CIS*3490: Analysis and Design of Computer Algorithms - A3
- * @version 09/03/2019
+ * @version 10/03/2019
  * @file P23.c
  * @brief A3 Problem 2.3 - c) Boyer-Moore algorithm to search for a substring pattern in a document
  * NOTE: only the basic 52 upper and lower case letters, and is case-sensitive

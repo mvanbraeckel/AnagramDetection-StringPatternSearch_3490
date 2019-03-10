@@ -11,7 +11,7 @@
 #include "a3header.h"
 
 /**
- * Brute force algorithm that searches for a substring pattern match in a document of up to 44049 lines of strings that are read from data_5.txt
+ * Exhaustive Brute force algorithm that searches for a substring pattern match in a document of up to 44049 lines of strings that are read from data_5.txt
  * --> then: prompts user for search pattern (substring), finds all occurences of the pattern, reports total #of occurences found, #of pattern shifts, and run time
  * @param const char* doc -the preread data_5.txt file as one string (w/ \r and \n removed)
  */
@@ -38,20 +38,19 @@ void p21(const char* doc) {
     }
 
     // search for matches
-    printf("\n...searching for matches...\n");
     ftime(&t_start);
     findMatches(doc, pattern, &matches, &shifts);
     ftime(&t_end);
 
     // calc execution time, then display results
     int t_elapsed = (int)( 1000.0*(t_end.time - t_start.time) + (t_end.millitm - t_start.millitm) );
-    printf("\nTotal Occurences Found\t= %d\nTotal Pattern Shifts\t= %d\nBrute Force Time\t= %d milliseconds\n", matches, shifts, t_elapsed);
+    printf("\nTotal Occurences Found\t\t= %d\nTotal Pattern Shifts\t\t= %d\nExhaustive Brute Force Time\t= %d milliseconds\n", matches, shifts, t_elapsed);
 }
 
 // ======================================================================
 
 /**
- * Finds all occurences of the search pattern substring in the text document
+ * Finds all occurences of the search pattern substring in the text document using exhaustive brute force algorithm
  * @param const char doc[] -the text being searched as a single string
  * @param char pattern[] -the search pattern key string to be matched
  * @param int *matches -passed-by-reference to count the number of occurences the pattern is found in the text
@@ -62,41 +61,13 @@ void findMatches(const char doc[], char pattern[], int *matches, int *shifts) {
     int len = strlen(doc);
     int pLen = strlen(pattern);
     *matches = 0;
-    *shifts = 0;
-    bool isMatch = false;
-    int n = 0;
+    *shifts = len - pLen;
 
     // do not need to search the last few characters of the text based on length of search pattern
-    for(int i = 0; i < len-pLen+1; i++) {
-        // reset
-        isMatch = false;
-        n = 0;
-
-        /*if(strncmp(doc+i, pattern, pLen-1) == 0) {
-            printf("match = '");
-            for(int j = 0; j < pLen; j++) {
-                printf("%c", doc[i+j]);
-            }
-            printf("'\n");
-        }*/
-
-        // search at the current point to see if it's a match
-        for(int j = 0; j < pLen; j++) {
-            if((doc+i)[j] != pattern[j]) {
-                break;
-            } else if(j == pLen-1) {
-                isMatch = true;
-            }
-            n++;
-        }
-        // check for match and shift pattern appropriately
-        if(isMatch) {
+    for(int i = 0; i < (*shifts)+1; i++) {
+        // check if it's a match
+        if(strncmp(doc+i, pattern, pLen) == 0) {
             (*matches)++;
-            i += pLen-1;
-        } else {
-            i += n;
         }
-        (*shifts)++;
     }
-
 }

@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
     while(1) {
         printf("\n1. P11.c - Brute Force Anagram Detection\n" \
                 "2. P12.c - Anagram Detection based on Presorting Technique (qsort)\n" \
-                "3. P21.c - Brute Force String Pattern Search\n" \
+                "3. P21.c - Exhaustive Brute Force String Pattern Search\n" \
                 "4. P22.c - Horspool's Algorithm (String Pattern Search)\n" \
                 "5. P23.c - Boyer-Moore Algorithm (String Pattern Search)\n" \
                 "6. Exit\n" \
