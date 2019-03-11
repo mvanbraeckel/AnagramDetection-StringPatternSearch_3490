@@ -17,8 +17,9 @@
 * Assumption: Since it doesn't specify the shift value when a match occurs in Horspool's Algorithm for string searching because it usually is only used to find first occurrence instead of all occurences, I shift by the most possible amount. a) If the first character of the search pattern string does not occur again in the pattern, shift by the full length of the pattern. b) If the first character of the search pattern string occurs in the pattern multiple times, shift by the index of its second occurrence. This same assumption applies to Boyer-Moore Algorithm as well (i.e. I do the same thing when I find a match).
 * Assumption: For Question 1 - since an anagram is just a word, input must not contain whitespace
 * Assumption: For Question 2 - only allow alphabetical characters [a,z] & [A,Z] to be contained in the input
-* NOTE: I haven't restarted my computer in a long time, I also haven't restarted my VM in a long time, and I have lots of stuff runnning in the background. Thus, my execution time may be a little slow, but this shouldn't really affect the ratios during analysis
+* NOTE: I haven't restarted my computer in a long time, I also haven't restarted my VM in a long time, and I have lots of stuff runnning in the background. Thus, my execution time may be a little slow, but this shouldn't really affect the ratios during analysis. I restarted it when I wrote the anaylsis PDF, so should be better than here.
 * Assumption: since the A3 handout description just says to choose 10 search patterns of different lengths, I will assume that it doesn't matter how many times the search pattern occurs
+* NOTE: As there is no explicit explanation given in the A3 handout/description, guide, or marking scheme, I will interpret that "briefly" wrting comparison and analysis for Q2.4 means a simple paragraph analyzing and comparing data trends is sufficient.
 
 ## makefile, then Run
 
@@ -119,23 +120,3 @@ Total Occurrences Found     = 3
 Total Pattern Shifts        = 451786
 Boyer-Moore Execution Time  = 118 milliseconds
 ```
-
-BarB = 3
-#WWII = 1
-#RSPCA = 1
-ardon = 5
-Hearn = 2
-#tongue = 1
-Britton = 3
-Lemieux = 2
-Bellbrae = 3
-planninga = 1
-#Casselman = 1
-Schofield = 3
-#1anumerical = 1
-Lagerquist = 3
-#DowneyWest = 1
-#lifelonglove = 1
-#CanadaDepartment = 1
-#VeterinaryCollege = 1
-#facultysupervising = 1
