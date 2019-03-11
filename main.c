@@ -121,6 +121,20 @@ int isAlphabetical(char *input) {
     return 1;
 }
 
+/**
+ * Determines which two integers is greater
+ * @param int a -the first integer
+ * @param int b -the second integer
+ * @return the larger integer
+ */
+int max(int a, int b) {
+    if(a > b) {
+        return a;
+    } else {
+        return b;
+    }
+}
+
 // ======================================== HELPERS ========================================
 
 /**

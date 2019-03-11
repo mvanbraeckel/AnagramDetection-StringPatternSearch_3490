@@ -112,7 +112,7 @@ void horspool(const char doc[], char pattern[], int *matches, int *shifts) {
         isMatch = true; //reset
         // compare pattern in reverse order on current spot in doc
         for(int j = pLen-1; j > -1; j--) {
-            // upon first mis-match, look up the shift val for the doc's corresponding char next to the right-most pattern's char using shift table
+            // upon first mis-match, look up the bad-symbol shift val for the doc's corresponding char next to the right-most pattern's char using bad-symbol shift table
             if(doc[i+j] != pattern[j]) {
                 isMatch = false;
                 shiftVal = getBadShiftVal(table, doc[i+pLen-1], pLen);
@@ -123,8 +123,7 @@ void horspool(const char doc[], char pattern[], int *matches, int *shifts) {
         if(!isMatch) {
             i += shiftVal-1;
         } else {
-            // if it was a complete match, shift by 1 (don't do)
-            // if it was a complete match, shift by length if first char only occurs once in pattern, otherwise shift by the index value of its second occurrence
+            // SEE ASSUMPTION: if it was a complete match, shift by length if first char only occurs once in pattern, otherwise shift by the index value of its second occurrence
             (*matches)++;
             i += matchShiftVal-1;
         }

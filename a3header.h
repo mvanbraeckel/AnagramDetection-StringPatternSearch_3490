@@ -34,6 +34,7 @@ void flushInput(char *input);
 int isWhitespace(char *input);
 int containsWhitespace(char *input);
 int isAlphabetical(char *input);
+int max(int a, int b);
 
 
 void readStrings(char* filename, char* arr[30000]);

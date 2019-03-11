@@ -118,7 +118,7 @@ void boyerMoore(const char doc[], char pattern[], int *matches, int *shifts) {
         // start at end of pattern and try i chars to find the right-most second suffix occurence with a different preceding char
         char precedingChar = pattern[pLen-1-i];
         // loops through the pattern in reverse (start one extra char in)
-        for(int j = pLen-2; j >= 0; j--) {
+        for(int j = pLen-2; j > -1; j--) {
             suffixMatch = true;
             // number of matched characters trying to be matched (while it goes in reverse)
             for(int k = 0; k < i; k++) {
@@ -154,10 +154,13 @@ void boyerMoore(const char doc[], char pattern[], int *matches, int *shifts) {
         isMatch = true; //reset
         // compare pattern in reverse order on current spot in doc
         for(int j = pLen-1; j > -1; j--) {
-            // upon first mis-match, look up the shift val for the doc's corresponding char next to the right-most pattern's char using shift table
+            // upon first mis-match, look up the bad-symbol shift val for the doc's corresponding char next to the pattern's char using bad-symbol shift table
+            // and also look up what the good-suffix shift value in the good suffix table is (d2)
             if(doc[i+j] != pattern[j]) {
                 isMatch = false;
-                shiftVal = getBadShiftVal(table, doc[i+pLen-1], pLen);
+                // the shift value calculation is: max(d1, d2) --where d1 is: max(<bad-symbol table shift val> - <#of char matches>, 1)
+                int k = pLen-1-j;
+                shiftVal = max( max(getBadShiftVal(table, doc[i+j], pLen) - k, 1), suff[k] );
                 break;
             }
         }
@@ -165,8 +168,7 @@ void boyerMoore(const char doc[], char pattern[], int *matches, int *shifts) {
         if(!isMatch) {
             i += shiftVal-1;
         } else {
-            // if it was a complete match, shift by 1 (don't do)
-            // if it was a complete match, shift by length if first char only occurs once in pattern, otherwise shift by the index value of its second occurrence
+            // SEE ASSUMPTION: if it was a complete match, shift by length if first char only occurs once in pattern, otherwise shift by the index value of its second occurrence
             (*matches)++;
             i += matchShiftVal-1;
         }
