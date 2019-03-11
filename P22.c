@@ -56,10 +56,10 @@ void p22() {
 // ======================================================================
 
 /**
- * Horspool's Algorithm - Finds all Occurrences of the search pattern substring in the text document
+ * Horspool's Algorithm - Finds all occurrences of the search pattern substring in the text document
  * @param const char doc[] -the text being searched as a single string
  * @param char pattern[] -the search pattern key string to be matched
- * @param int *matches -passed-by-reference to count the number of Occurrences the pattern is found in the text
+ * @param int *matches -passed-by-reference to count the number of occurrences the pattern is found in the text
  * @param int *shifts -passed-by-reference to count the number of pattern shifts that occur while searching the text
  */
 void horspool(const char doc[], char pattern[], int *matches, int *shifts) {
@@ -72,6 +72,7 @@ void horspool(const char doc[], char pattern[], int *matches, int *shifts) {
     bool isMatch = true;
     int shiftVal = pLen;
     
+    // ********************************************** creating bad-symbol shift table **********************************************
     // init bad-symbol shift table ([a-zA-Z] and default bad-symbol shift val as pattern length)
     for(int i = 0; i < 26; i++) {
         table[i][0] = 'a'+i;
@@ -105,6 +106,7 @@ void horspool(const char doc[], char pattern[], int *matches, int *shifts) {
     }
     printf("\nmatchShiftVal = %d\n", matchShiftVal);*/
     
+    // ********************************************** searching for matches **********************************************
     // do not need to search the last few characters of the text based on length of search pattern
     for(int i = 0; i < len-pLen+1; i++) {
         isMatch = true; //reset

@@ -50,5 +50,6 @@ const char* readDocument(char* filename);
 void findMatches(const char doc[], char pattern[], int *matches, int *shifts);
 void horspool(const char doc[], char pattern[], int *matches, int *shifts);
 int getBadShiftVal(char table[52][2], char c, int pLen);
+void boyerMoore(const char doc[], char pattern[], int *matches, int *shifts);
 
 #endif
