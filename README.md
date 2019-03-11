@@ -18,6 +18,7 @@
 * Assumption: For Question 1 - since an anagram is just a word, input must not contain whitespace
 * Assumption: For Question 2 - only allow alphabetical characters [a,z] & [A,Z] to be contained in the input
 * NOTE: I haven't restarted my computer in a long time, I also haven't restarted my VM in a long time, and I have lots of stuff runnning in the background. Thus, my execution time may be a little slow, but this shouldn't really affect the ratios during analysis
+* Assumption: since the A3 handout description just says to choose 10 search patterns of different lengths, I will assume that it doesn't matter how many times the search pattern occurs
 
 ## makefile, then Run
 
@@ -119,21 +120,22 @@ Total Pattern Shifts        = 451786
 Boyer-Moore Execution Time  = 118 milliseconds
 ```
 
-Schofield = 3
-lifelonglove = 1
-facultysupervising = 1
 BarB = 3
-Bellbrae = 3
-DowneyWest = 1
-CanadaDepartment = 1
-VeterinaryCollege = 1
-WWII = 1
-Lagerquist = 3
-Lemieux = 2
-RSPCA = 1
+#WWII = 1
+#RSPCA = 1
 ardon = 5
-Britton = 3
-planninga = 1
-tongue = 1
-Casselman = 1
 Hearn = 2
+#tongue = 1
+Britton = 3
+Lemieux = 2
+Bellbrae = 3
+planninga = 1
+#Casselman = 1
+Schofield = 3
+#1anumerical = 1
+Lagerquist = 3
+#DowneyWest = 1
+#lifelonglove = 1
+#CanadaDepartment = 1
+#VeterinaryCollege = 1
+#facultysupervising = 1
