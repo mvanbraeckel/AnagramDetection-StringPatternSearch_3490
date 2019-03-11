@@ -4,7 +4,7 @@
  * @version 09/03/2019
  * @file P12.c
  * @brief A3 Problem 1.2 - b) presort-based, transform-and-conquer algorithm to detect anagrams
- * NOTE: using qsort function from stdlib.h to presort
+ * NOTE: using mergesort frrom A2 to presort
  */
 
 #include "a3header.h"

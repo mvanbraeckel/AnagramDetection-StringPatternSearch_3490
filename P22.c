@@ -41,14 +41,13 @@ void p22() {
     }
     
     // search for matches
-    printf("\n...searching for matches...\n");
     ftime(&t_start);
     horspool(doc, pattern, &matches, &shifts);
     ftime(&t_end);
 
     // calc execution time, then display results
     int t_elapsed = (int)( 1000.0*(t_end.time - t_start.time) + (t_end.millitm - t_start.millitm) );
-    printf("\nTotal Occurrences Found\t= %d\nTotal Pattern Shifts\t= %d\nHorspool Execution Time\t= %d milliseconds\n", matches, shifts, t_elapsed);
+    printf("\nTotal Occurrences Found\t\t= %d\nTotal Pattern Shifts\t\t= %d\nHorspool Execution Time\t\t= %d milliseconds\n", matches, shifts, t_elapsed);
 
     // free all created strings
     free((char*)doc);
@@ -73,13 +72,13 @@ void horspool(const char doc[], char pattern[], int *matches, int *shifts) {
     bool isMatch = true;
     int shiftVal = pLen;
     
-    // init shift table ([a-zA-Z] and default shift val as pattern length)
+    // init bad-symbol shift table ([a-zA-Z] and default bad-symbol shift val as pattern length)
     for(int i = 0; i < 26; i++) {
         table[i][0] = 'a'+i;
         table[i+26][0] = 'A'+i;
         table[i][1] = table[i+26][1] = pLen;
     }
-    // fill shift table (length - index - 1)
+    // fill bad-symbol shift table (length - index - 1)
     for(int i = 0; i < pLen-1; i++) {
         // check its case first
         if(islower(pattern[i])) {
@@ -88,7 +87,7 @@ void horspool(const char doc[], char pattern[], int *matches, int *shifts) {
             table[pattern[i]-'A'+26][1] = pLen-i-1;
         }
     }
-    // calculate shift val for if a match is found
+    // calculate bad-symbol shift val for if a match is found
     int matchShiftVal = pLen;
     if(pLen > 1) {
         char firstChar = pattern[0];
@@ -100,7 +99,7 @@ void horspool(const char doc[], char pattern[], int *matches, int *shifts) {
         }
     }
 
-    /*// prints the shift table
+    /*// prints the bad-symbol shift table
     for(int i = 0; i < 52; i++) {
         printf(" %c=%d", table[i][0], table[i][1]);
     }
@@ -114,7 +113,7 @@ void horspool(const char doc[], char pattern[], int *matches, int *shifts) {
             // upon first mis-match, look up the shift val for the doc's corresponding char next to the right-most pattern's char using shift table
             if(doc[i+j] != pattern[j]) {
                 isMatch = false;
-                shiftVal = getShiftVal(table, doc[i+pLen-1], pLen);
+                shiftVal = getBadShiftVal(table, doc[i+pLen-1], pLen);
                 break;
             }
         }
@@ -128,56 +127,6 @@ void horspool(const char doc[], char pattern[], int *matches, int *shifts) {
             i += matchShiftVal-1;
         }
         (*shifts)++;
-        
-        /*// reset
-        isMatch = false;
-        n = 0;
-
-        if(strncmp(doc+i, pattern, pLen) == 0) {
-            (*matches)++;
-        }
-
-        // search at the current point to see if it's a match
-        for(int j = 0; j < pLen; j++) {
-            if((doc+i)[j] != pattern[j]) {
-                break;
-            } else if(j == pLen-1) {
-                isMatch = true;
-            }
-            n++;
-        }
-        // check for match and shift pattern appropriately
-        if(isMatch) {
-            (*matches)++;
-            i += pLen-1;
-        } else {
-            i += n;
-        }
-        (*shifts)++;*/
     }
-}
-
-/**
- * Retrieves the shift value of the given char from the shift table
- * @param char table[][] -the shift table being used
- * @param char c -the character being looked up in the shift table (from the string being searched--the right-most char)
- * @param int pLen -the length of the search pattern string
- * @return the shift value of the givenchar according to the shift table
- */
-int getShiftVal(char table[52][2], char c, int pLen) {
-    // make sure it's alphabetical first (start search differently depending on char case)
-    if(islower(c)) {
-        for(int i = 0; i < 26; i++) {
-            if(table[i][0] == c) {
-                return table[i][1];
-            }
-        }
-    } else if(isupper(c)) {
-        for(int i = 26; i < 52; i++) {
-            if(table[i][0] == c) {
-                return table[i][1];
-            }
-        }
-    } // else
-    return pLen;
+    (*shifts)--; //account for it iterating an extra time but not making a check in the last iteration of the loop
 }

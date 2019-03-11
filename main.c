@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
     // infinite menu loop, only ending program with '7' as input
     while(1) {
         printf("\n1. P11.c - Brute Force Anagram Detection\n" \
-                "2. P12.c - Anagram Detection based on Presorting Technique (qsort)\n" \
+                "2. P12.c - Anagram Detection based on Presorting Technique (mergesort)\n" \
                 "3. P21.c - Exhaustive Brute Force String Pattern Search\n" \
                 "4. P22.c - Horspool's Algorithm (String Pattern Search)\n" \
                 "5. P23.c - Boyer-Moore Algorithm (String Pattern Search)\n" \
@@ -159,8 +159,6 @@ void readStrings(char* filename, char* arr[30000]) {
  */
 const char* readDocument(char* filename) {
     char* doc = NULL;
-    //char* temp = NULL;
-    
     FILE *fp = fopen(filename, "r");
     // checks if fopen messed up
     if(fp == NULL) {
@@ -172,42 +170,36 @@ const char* readDocument(char* filename) {
         int len = ftell(fp);
         fseek(fp, 0, SEEK_SET);
         doc = calloc(len+1, sizeof(char)); //init the string array
-        //temp = calloc(len+1, sizeof(char));
-
-        // read one string at a time until the end of the file (or max reached)
-        /*char buffer[102] = ""; //100 char max
-        int i = 0;
-        while(!feof(fp)) {
-            // read a word, allocate mem, copy over data, null terminate (just in case)
-            if(i++ != 0 ) {
-                strcat(doc, " ");
-            }
-            fgets(buffer, 102, fp);
-            // replace CR and LF at the end if they exist
-            int bLen = strlen(buffer);
-            for(int j = bLen-1; j > bLen-3; j--) {
-                if(buffer[j] == '\n' || buffer[j] == '\r') {
-                    buffer[j] = '\0';
-                }
-            }
-            //printf("@i=%d --> buffer: '%s'\n",i,buffer);
-            strcat(doc, buffer);
-        }*/
 
         fread(doc, sizeof(char), len, fp); // reads entire file into the array at once
 		doc[len] = '\0';
-
-        // remove CR and LF if they appear
-        /*for(int i = 0; i < len; i++) {
-            if(doc[i] == '\n' || doc[i] == '\r') {
-                strcpy(temp, doc+i+1);
-                strcpy(doc+i, temp);
-                len--;
-                i--;
-            }
-        }
-        free(temp);*/
 	}
     fclose(fp);
     return (const char*)doc;
+}
+
+
+/**
+ * Retrieves the bad-symbol shift value of the given char from the bad-symbol shift table
+ * @param char table[][] -the bad-symbol shift table being used
+ * @param char c -the character being looked up in the bad-symbol shift table
+ * @param int pLen -the length of the search pattern string
+ * @return the bad-symbol shift value of the given char
+ */
+int getBadShiftVal(char table[52][2], char c, int pLen) {
+    // make sure it's alphabetical first (start search differently depending on char case)
+    if(islower(c)) {
+        for(int i = 0; i < 26; i++) {
+            if(table[i][0] == c) {
+                return table[i][1];
+            }
+        }
+    } else if(isupper(c)) {
+        for(int i = 26; i < 52; i++) {
+            if(table[i][0] == c) {
+                return table[i][1];
+            }
+        }
+    } // else
+    return pLen;
 }
