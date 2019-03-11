@@ -14,16 +14,6 @@ int main(int argc, char* argv[]) {
 
     // declare variables
     char menu_input[3];
-    const char* doc = NULL;
-    struct timeb t_start, t_end;
-    
-    // read in the data
-    printf("\n...loading data... (~20 seconds)\n");
-    ftime(&t_start);
-    doc = readDocument("data_5.txt");
-    ftime(&t_end);
-    int t_elapsed = (int)( 1000.0*(t_end.time - t_start.time) + (t_end.millitm - t_start.millitm) );
-    printf("\nReading Time = %d milliseconds\n", t_elapsed);
 
     // infinite menu loop, only ending program with '7' as input
     while(1) {
@@ -50,19 +40,16 @@ int main(int argc, char* argv[]) {
             p12();
 
         } else if(menu_input[0] == '3') {         // ================================= 3 =================================
-            p21(doc);
+            p21();
 
         } else if(menu_input[0] == '4') {         // ================================= 4 =================================
-            p22(doc);
+            p22();
 
         } else if(menu_input[0] == '5') {         // ================================= 5 =================================
-            p23(doc);
+            p23();
 
         } else if(menu_input[0] == '6') {         // ================================= 6 =================================
             printf("\nGood bye!\n");    // display closing msg
-
-            // free before leaving
-            free((char*)doc);
             return 0;
 
         } else {                                  // =============================== ELSE ================================

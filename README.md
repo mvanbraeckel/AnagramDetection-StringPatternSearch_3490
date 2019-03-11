@@ -1,7 +1,10 @@
 # AnagramDetection-StringPatternSearch_3490
+
 Analyze and compare efficiency of anagram detection using brute force and presorting (transform-and-conquer) methods. Also, do the same for searching a document for string pattern using brute force, Horspool's, and Boyer-Moore's algorithmic solution (Analysis and Design of Computer Algorithms course A3)
 
-NOTE: I removed CR '\r' and LF '\n' characters from the data_5.txt file when reading it into memory because I assumed that we should not be checking against these characters as it would intergere with the number of pattern shifts. I also only read this file once when the program is initially started up because it takes ~20 seconds to read. Also, I can read it in 2-5 seconds, but that gives valgrind memory errors due to strcpy dest and src overlapping and messing it up, so instead I have to use a temp and 2 strcpy calls. If I don't remove CR and LF characters, I can read it in under 20 milliseconds. Nevermind -- I found out that we aren't supposed to remove any characters/symbold from the text file, so I don't do this anymore. But I still read in the data at the start.
+## NOTES & ASSUMPTIONS
+
+Assumption: Since it doesn't specify the shift value when a match occurs in Horspool's Algorithm for string searching because it usually is only used to find first occurrence instead of all occurences, I shift by the most possible amount. a) If the first character of the search pattern string does not occur again in the pattern, shift by the full length of the pattern. b) If the first character of the search pattern string occurs in the pattern multiple times, shift by the index of its second occurrence.
 
 Schofield = 3
 lifelonglove = 1

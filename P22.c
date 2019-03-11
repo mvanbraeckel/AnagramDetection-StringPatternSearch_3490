@@ -12,16 +12,19 @@
 
 /**
  * Horspool's algorithm that searches for a substring pattern match in a document of up to 44049 lines of strings that are read from data_5.txt
- * --> prompt user for search pattern (substring), find all occurences of the pattern, report total #of occurences found, #of pattern shifts, and run time
- * @param const char* doc -the preread data_5.txt file as one string (w/ \r and \n removed)
+ * --> prompt user for search pattern (substring), find all Occurrences of the pattern, report total #of Occurrences found, #of pattern shifts, and run time
  */
-void p22(const char* doc) {
+void p22() {
     // declare variables
+    const char* doc = NULL;
     char pattern[102];
     int matches = 0;
     int shifts = 0;
     bool validInput = false;
     struct timeb t_start, t_end;
+
+    // read in the data
+    doc = readDocument("data_5.txt");
 
     // prompt user for search pattern substring, make sure they enter something valid
     while(!validInput) {
@@ -36,28 +39,28 @@ void p22(const char* doc) {
             validInput = true;
         }
     }
-    int pLen = strlen(pattern);
     
     // search for matches
-    printf("\n...searching for matches... (not using horspool's yet)\n");
+    printf("\n...searching for matches...\n");
     ftime(&t_start);
     horspool(doc, pattern, &matches, &shifts);
     ftime(&t_end);
 
     // calc execution time, then display results
     int t_elapsed = (int)( 1000.0*(t_end.time - t_start.time) + (t_end.millitm - t_start.millitm) );
-    printf("\nTotal Occurences Found\t= %d\nTotal Pattern Shifts\t= %d\nBrute Force Time\t= %d milliseconds\n", matches, shifts, t_elapsed);
+    printf("\nTotal Occurrences Found\t= %d\nTotal Pattern Shifts\t= %d\nHorspool Execution Time\t= %d milliseconds\n", matches, shifts, t_elapsed);
 
-    printf("\tI am p22\n");
+    // free all created strings
+    free((char*)doc);
 }
 
 // ======================================================================
 
 /**
- * Horspool's Algorithm - Finds all occurences of the search pattern substring in the text document
+ * Horspool's Algorithm - Finds all Occurrences of the search pattern substring in the text document
  * @param const char doc[] -the text being searched as a single string
  * @param char pattern[] -the search pattern key string to be matched
- * @param int *matches -passed-by-reference to count the number of occurences the pattern is found in the text
+ * @param int *matches -passed-by-reference to count the number of Occurrences the pattern is found in the text
  * @param int *shifts -passed-by-reference to count the number of pattern shifts that occur while searching the text
  */
 void horspool(const char doc[], char pattern[], int *matches, int *shifts) {
@@ -67,9 +70,9 @@ void horspool(const char doc[], char pattern[], int *matches, int *shifts) {
     int pLen = strlen(pattern);
     *matches = 0;
     *shifts = 0;
-    bool isMatch = false;
-    int n = 0;
-
+    bool isMatch = true;
+    int shiftVal = pLen;
+    
     // init shift table ([a-zA-Z] and default shift val as pattern length)
     for(int i = 0; i < 26; i++) {
         table[i][0] = 'a'+i;
@@ -85,19 +88,46 @@ void horspool(const char doc[], char pattern[], int *matches, int *shifts) {
             table[pattern[i]-'A'+26][1] = pLen-i-1;
         }
     }
+    // calculate shift val for if a match is found
+    int matchShiftVal = pLen;
+    if(pLen > 1) {
+        char firstChar = pattern[0];
+        for(int i = 1; i < pLen; i++) {
+            if(pattern[i] == firstChar) {
+                matchShiftVal = i;
+                break;
+            }
+        }
+    }
 
-    /*for(int i = 0; i < 52; i++) {
+    /*// prints the shift table
+    for(int i = 0; i < 52; i++) {
         printf(" %c=%d", table[i][0], table[i][1]);
-    }*/
-
+    }
+    printf("\nmatchShiftVal = %d\n", matchShiftVal);*/
+    
     // do not need to search the last few characters of the text based on length of search pattern
     for(int i = 0; i < len-pLen+1; i++) {
-        
+        isMatch = true; //reset
         // compare pattern in reverse order on current spot in doc
-
-        // upon first mis-match, look up that doc's char of the mis-match in the table and shift by its val
-
-        // if it was a complete match, shift by 1
+        for(int j = pLen-1; j > -1; j--) {
+            // upon first mis-match, look up the shift val for the doc's corresponding char next to the right-most pattern's char using shift table
+            if(doc[i+j] != pattern[j]) {
+                isMatch = false;
+                shiftVal = getShiftVal(table, doc[i+pLen-1], pLen);
+                break;
+            }
+        }
+        // shift by the appropriate amount (account that for loop will +1 afterwards)
+        if(!isMatch) {
+            i += shiftVal-1;
+        } else {
+            // if it was a complete match, shift by 1 (don't do)
+            // if it was a complete match, shift by length if first char only occurs once in pattern, otherwise shift by the index value of its second occurrence
+            (*matches)++;
+            i += matchShiftVal-1;
+        }
+        (*shifts)++;
         
         /*// reset
         isMatch = false;
@@ -125,4 +155,29 @@ void horspool(const char doc[], char pattern[], int *matches, int *shifts) {
         }
         (*shifts)++;*/
     }
+}
+
+/**
+ * Retrieves the shift value of the given char from the shift table
+ * @param char table[][] -the shift table being used
+ * @param char c -the character being looked up in the shift table (from the string being searched--the right-most char)
+ * @param int pLen -the length of the search pattern string
+ * @return the shift value of the givenchar according to the shift table
+ */
+int getShiftVal(char table[52][2], char c, int pLen) {
+    // make sure it's alphabetical first (start search differently depending on char case)
+    if(islower(c)) {
+        for(int i = 0; i < 26; i++) {
+            if(table[i][0] == c) {
+                return table[i][1];
+            }
+        }
+    } else if(isupper(c)) {
+        for(int i = 26; i < 52; i++) {
+            if(table[i][0] == c) {
+                return table[i][1];
+            }
+        }
+    } // else
+    return pLen;
 }
