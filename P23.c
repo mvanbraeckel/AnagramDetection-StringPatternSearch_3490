@@ -41,7 +41,6 @@ void p23() {
     }
     
     // search for matches
-    printf("\n...searching for matches...(not done BM right now)\n");
     ftime(&t_start);
     boyerMoore(doc, pattern, &matches, &shifts);
     ftime(&t_end);
@@ -142,11 +141,11 @@ void boyerMoore(const char doc[], char pattern[], int *matches, int *shifts) {
         }
     }
 
-    // print good-suffix shift table
+    /*// print good-suffix shift table
     for(int i = 0; i < pLen; i++) {
         printf(" @k=%d->%d", i, suff[i]);
     }
-    printf("\n");
+    printf("\n");*/
     
     // ********************************************** searching for matches **********************************************
     // do not need to search the last few characters of the text based on length of search pattern
